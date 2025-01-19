@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iframe with Custom Header using AJAX</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Iframe with Custom Header using AJAX</h1>
+    
+    <iframe id="output_iframe" width="100%" height="500px" src=""></iframe>
+    
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8088/superset/dashboard/8/?native_filters_key=CO0Uk_WrQ23eSAstCsXL9Kton1WXi75q5XUmJ1Y29XLDOiDaazkRiJKFZ1iCK7Pj", // URL yang ingin diakses
+                contentType: "application/json",
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader("Authorization", "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6dHJ1ZSwiaWF0IjoxNzI3OTM1NDU5LCJqdGkiOiI4NzNmNmZlNC1kYmQ1LTRjMDEtODA3NC1kMWY1YWUxNTA3YTUiLCJ0eXBlIjoiYWNjZXNzIiwic3ViIjoxLCJuYmYiOjE3Mjc5MzU0NTksImV4cCI6MTcyNzkzNjM1OX0.nSAzjzM7Z8rtEGdA4PoZJbBEflj_dlf8Zd7PZHEGihk"); // Menambahkan header kustom
+                },
+                success: function(data){
+                    // Menampilkan konten ke dalam iframe
+                    $('#output_iframe').attr('src', "data:text/html;charset=utf-8," + encodeURIComponent(data));
+                },
+                error: function(error){
+                    console.error("Error fetching the page:", error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
