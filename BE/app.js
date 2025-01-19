@@ -9,14 +9,14 @@ const port = 3001;
 app.use(cors({
     origin: 'http://localhost:3002', // Sesuaikan dengan origin frontend
     credentials: true // Izinkan pengiriman cookie
-  }));
+}));
 app.use(express.json()); // Untuk parsing JSON
 
 app.get('/start-login', async (req, res) => {
     const browser = await puppeteer.launch({
         headless: true,
         defaultViewport: null,
-        executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe"
+        // Menghapus executablePath, Puppeteer akan mencari browser yang terpasang
     });
 
     const page = await browser.newPage();
@@ -44,21 +44,14 @@ app.get('/start-login', async (req, res) => {
     await browser.close();
 
     // Set setiap cookie dari Puppeteer sebagai cookie di response Express
-
-    
-    
-
     const sessionValue = await cookies.find(cookie => cookie.name === 'session').value;
-   
-    res.cookie('session', sessionValue, {
 
+    res.cookie('session', sessionValue, {
         httpOnly: true,
         secure: false, // Set true jika menggunakan HTTPS
         sameSite: 'Lax',
         path: '/', // Path di mana cookie tersedia
     });
-
-    
 
     // Kirim respon bahwa cookies telah diset
     res.json({ sessionValue });
